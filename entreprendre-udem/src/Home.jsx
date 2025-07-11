@@ -5,9 +5,14 @@ import 'swiper/css';
 import 'swiper/css/autoplay';
 import {motion, AnimatePresence} from 'framer-motion';
 import { Link } from 'react-router-dom';
-
+import EventCard from './EventCard';
+import 'swiper/css/navigation';
+import { Navigation } from 'swiper/modules';
+import { useLocation } from "react-router-dom";
 
 function Home() {
+  
+
   const eventImages = [
     "/Photo_evenement/Udem_Entreprend/IMG_0022.webp",
     "/Photo_evenement/Udem_Entreprend/YZA04397.webp",
@@ -15,6 +20,13 @@ function Home() {
     "/Photo_evenement/Udem_Entreprend/YZA04457.webp",
     "/Photo_evenement/Udem_Entreprend/YZA04489.webp"
   ];
+
+  const benveloleImages = [
+    "/Photo_evenement/Udem_Entreprend/YZA04598.webp",
+    "/Photo_evenement/Udem_Entreprend/YZA04448.webp",
+    "/Photo_evenement/Udem_Entreprend/YZA04458.webp"
+    
+  ]
 
   const membreEquipe = [
     {
@@ -102,8 +114,8 @@ function Home() {
   const ctx = canvas.getContext("2d");
 
   const resize = () => {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    canvas.width = document.documentElement.scrollWidth;
+    canvas.height = document.documentElement.scrollHeight;
   };
 
   resize();
@@ -113,8 +125,8 @@ function Home() {
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
     radius: Math.random() * 1.5 + 0.5,
-    dx: (Math.random() - 0.5) * 0.2,
-    dy: (Math.random() - 0.5) * 0.2,
+    dx: (Math.random() - 0.5) * 0.5,
+    dy: (Math.random() - 0.5) * 0.5,
   }));
 
   const draw = () => {
@@ -150,24 +162,44 @@ function Home() {
   };
 }, []);
 
+  const location = useLocation();
+  const message = location.state?.message ;
+
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.querySelector(location.hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
+
   return (
+    
     <div className="min-h-screen overflow-x-hidden bg-gradient-to-b from-[#0c0c1e] to-[#121232] text-white font-sans w-full ">
+      {message && (
+        <div className="fixed top-0 left-0 w-full bg-green-600 text-white p-4 text-center z-50">
+          {message}
+        </div>
+      )}
       <header className="flex items-center justify-between px-6 py-4 bg-[#0c0c1e] shadow-md">
         <div className="text-xl font-bold text-blue-300">
-          <span className="text-white">UdeM </span>Entreprend
+          <Link to="/home">
+            <span className="text-white">UdeM </span>Entreprend
+        </Link>
         </div>
         <nav className="space-x-6 text-sm">
-          <a href="#Qui-sommes-nous" className="hover:text-blue-400 transition">Qui sommes-nous?</a>
-          <a href="#equipe" className="hover:text-blue-400 transition">Équipes</a>
-          <a href="#evenements" className="hover:text-blue-400 transition">Événements</a>
-          <a href="#partenaire" className="hover:text-blue-400 transition">Partenaire</a>
-          <a href="#benevole" className="hover:text-blue-400 transition">Bénévole</a>
-          <a href="#contact" className="hover:text-blue-400 transition">Contact</a>
+          <Link to="/home#Qui-sommes-nous" className="hover:text-blue-400 transition">Qui sommes-nous?</Link>
+          <Link to="/home#equipe" className="hover:text-blue-400 transition">Équipes</Link>
+          <Link to="/home#evenements" className="hover:text-blue-400 transition">Événements</Link>
+          <Link to="/home#partenaire" className="hover:text-blue-400 transition">Partenaire</Link>
+          <Link to="/home#benevole" className="hover:text-blue-400 transition">Bénévole</Link>
+          <Link to="/home#contact" className="hover:text-blue-400 transition">Contact</Link>
         </nav>
       </header>
-      <div className="relative bg-gradient-to-b from-[#0c0c1e] to-transparent h-[650px] flex items-center justify-center overflow-hidden">
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[1450px] h-[550px] bg-blue-500 rounded-b-full blur-2xl opacity-30 z-0" />
-        <div className="relative z-10 text-center">
+      <div className="relative bg-gradient-to-b from-[#0c0c1e] to-transparent h-[800px] flex items-center justify-center overflow-hidden">
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[1800px] h-[650px] bg-blue-500 rounded-b-full blur-2xl opacity-30 z-0 border-none" />
+        <div className="relative z-10 text-center bottom-20">
           <h1 className="text-4xl md:text-5xl font-bold text-blue-300">
             Udem Entreprend
             <br />Faconnons ensemble l'avenir de l'entrepreneuriat universitaire
@@ -182,57 +214,37 @@ function Home() {
           </a>
         </div>
       </div>
-      <canvas id="star-canvas" className="absolute top-[100px] left-0 w-full h-[5200px] z-0 pointer-events-none" />
+      <canvas id="star-canvas" className="absolute top-[100px] left-0 w-full h-[5700px] z-0 pointer-events-none" />
       <section id="communaute" className="w-full py-20">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
           <h2 className="text-center text-3xl text-blue-300 font-semibold">
             Une communauté en action
           </h2>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="max-w-5xl mx-auto mt-6"
-        >
           <Swiper
             modules={[Autoplay]}
             spaceBetween={30}
             slidesPerView={1}
             loop={true}
             autoplay={{ delay: 3000, disableOnInteraction: false }}
-            className="rounded-2xl shadow-xl"
           >
             {eventImages.map((src, index) => (
               <SwiperSlide key={index}>
-                <img
-                  src={src}
-                  alt={`Événement ${index + 1}`}
-                  className="w-full h-[550px] object-cover rounded-2xl"
-                  loading="lazy"
-                />
+                <div className="rounded-2xl overflow-hidden mx-8 max-w-5xl mx-auto mt-6">
+                  <img
+                    src={src}
+                    alt={`Événement ${index + 1}`}
+                    className="w-full h-[300px] md:h-[450px] lg:h-[550px] object-cover"
+                    loading="lazy"
+                  />
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>
-        </motion.div>
       </section>
       <div id='Qui-sommes-nous' className='m-7 "bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white min-h-screen p-8 mb-10"'>
-        <motion.div
-        initial={{ opacity: 0, y: -50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}>
         <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 tracking-wide text-blue-400 animate-pulse"> Qui sommes-nous?</h1>
         <p className="text-center text-lg md:text-xl text-gray-300 mb-12 max-w-2xl mx-auto">UdeM Entreprend est l'association étudiante dédiée à l'entrepreneuriat de l'Université de Montréal.
           Nous accompagnons les étudiants dans leur parcours entrepreneurial en offrant des ressources,
           des formations et un réseau solide pour transformer leurs idées en projets concrets.</p>
-          </motion.div>
         <div className="absolute top-[1800px] left-0 w-[200px] h-[400px] bg-purple-600 opacity-25 blur-3xl z-0" />
         <motion.div
           initial={{ opacity: 0, y: 60 }}
@@ -287,13 +299,13 @@ function Home() {
           </div>
         </motion.div>
         <div className="relative mt-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 place-items-center relative z-10">
+          <div className="grid sm:grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-10 place-items-center relative z-10">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
               viewport={{ once: true }}
-              className="h-[450px] flex flex-col justify-center bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-xl text-center max-w-2xl shadow-xl">
+              className="h-[500px] flex flex-col justify-center bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-xl text-center shadow-xl">
               <h1 className="text-4xl font-semibold text-blue-200 mb-4">Notre Histoire</h1>
               <p className="text-gray-300 text-xl">
                 Fondée par des étudiants passionnés d'entrepreneuriat, UdeM Entreprend a vu le jour avec l'ambition de créer une communauté entrepreneuriale forte à l'Université de Montréal.
@@ -306,41 +318,41 @@ function Home() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
               viewport={{ once: true }}
-              className="w-full h-[450px]">
+              className="w-full h-[500px]">
               <Swiper 
                 modules={[Autoplay]}
                 spaceBetween={20}
                 slidesPerView={1}
                 autoplay={{ delay: 3000, disableOnInteraction: false }}
                 loop={true}
-                className="h-[450px] flex items-center justify-center w-full rounded-xl overflow-hidden shadow-xl">
+                className="h-[500px] flex items-center justify-center w-full rounded-xl overflow-hidden shadow-xl">
                 <SwiperSlide>
                   <img
                     src="/Photo_evenement/Udem_Entreprend/equipe2019.webp"
                     alt="Vision de l'association"
                     loading="lazy"
-                    className="w-full h-[450px] object-cover object-[0%_20%] rounded-lg"/>
+                    className="w-full h-[500px] object-cover object-[0%_20%] rounded-lg"/>
                 </SwiperSlide>
                 <SwiperSlide>
                   <img
                     src="/Membre photo 2023-2024/Photo Équipe.webp"
                     alt="Vision de l'association"
                     loading="lazy"
-                    className="w-full h-[450px] object-cover object-[0%_20%] rounded-lg"/>
+                    className="w-full h-[500px] object-cover object-[0%_20%] rounded-lg"/>
                 </SwiperSlide>
                 <SwiperSlide>
                   <img
                     src="/Membre photo 2024-2025/Photo Équipe.jpg"
                     alt="Vision de l'association"
                     loading="lazy"
-                    className="w-full h-[450px] object-cover rounded-lg"/>
+                    className="w-full h-[500px] object-cover rounded-lg"/>
                 </SwiperSlide>
                 <SwiperSlide>
                   <img
                     src="/Photo_evenement/1744069996453.webp"
                     alt="Vision de l'association"
                     loading="lazy"
-                    className="w-full h-[450px] object-cover rounded-lg"/>
+                    className="w-full h-[500px] object-cover rounded-lg"/>
                 </SwiperSlide>
               </Swiper>
             </motion.div>
@@ -348,8 +360,8 @@ function Home() {
         </div>
       </div>
       <div>
-        <div id='equipe' className="flex flex-col md:flex-row justify-between items-center p-5 shadow-lg gap-10 bg-[#0c0c1e] mt-30 relative z-10">
-          <div className="md:w-1/2 text-left ml-15">
+        <div id='equipe' className="grid lg:grid-cols-2 items-center p-5 shadow-lg gap-10 bg-[#0c0c1e] mt-30 relative z-10">
+          <div className="md:text-left md:ml-20 text-center ">
             <h1 className='text-3xl font-semibold text-blue-300 mb-6 max-w-xl'>Une équipe engagée pour stimuler l'entrepreneuriat étudiant</h1>
             <p className='mb-6 text-base leading-relaxed'>Notre équipe est composée d’étudiants passionnés qui accompagnent et inspirent la relève entrepreneuriale à l’Université de Montréal. Ensemble, nous bâtissons un écosystème dynamique et inclusif.</p>
             <Link to='/equipePage'>
@@ -362,7 +374,7 @@ function Home() {
             </div>
             </Link>
           </div>
-          <div className="md:w-1/3 rounded-xl shadow-md p-4 text-center mr-15 relative min-h-[550px] md:min-h-[700px] overflow-hidden">
+          <div className="p-4 items-center text-center justify-center relative overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentMember.name}
@@ -370,12 +382,12 @@ function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="w-full top-0 left-0">
+                className="w-[400px] mx-auto">
                 <img
                 loading="lazy"
                   src={currentMember.image}
                   alt={currentMember.name}
-                  className="w-full h-[400px] md:h-[500px]  rounded-xl object-cover mt-15"/>
+                  className="w-full h-[500px] rounded-xl object-cover mt-4"/>
                 <h2 className="text-lg font-semibold">{currentMember.name}</h2>
                 <p className="text-sm mb-2">{currentMember.role}</p>
                 <a
@@ -390,38 +402,112 @@ function Home() {
           </div>
         </div>
       </div>
-      <div id='evenements' className="p-10 items-center text-center">
-        <motion.div 
-        initial={{ opacity: 0, y: -50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 } }
-        viewport={{ once: true }}>
+      <div id='evenements' className="p-15 items-center text-center justify-center flex flex-col">
         <h1 className="text-4xl md:text-4xl font-bold text-center mb-4 tracking-wide text-blue-400 animate-pulse">Nos Évenements</h1>
         <p className="text-white mb-6">Découvrez les événements à venir organisés par UdeM Entreprend.</p>
-        </motion.div>
-        <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        viewport={{ once: true }}>
-        <a href='Événements' className="relative inline-block px-6 py-2 rounded-full text-white font-medium
+        <EventCard
+      title="À venir"
+      description="Aucun événement n'est prévu pour le moment. Revenez bientôt pour découvrir nos prochaines activités !" />
+        <a href='evenements' className="relative inline-block px-6 py-2 rounded-full text-white font-medium
               border border-white/30 bg-white/10 backdrop-blur-md
               hover:bg-gradient-to-r hover:from-blue-400 hover:to-violet-500
             hover:text-white transition-all duration-300
               hover:shadow-[0_0_25px_rgba(59,130,246,0.5)] hover:scale-105">
           Voir les événements
         </a>
-        </motion.div>
       </div>
       <div id='partenaire' className='p-10 bg-[#0c0c1e] items-center text-center relative z-10'>
         <h1 className="text-3xl md:text-4xl font-bold text-center mb-4 tracking-wide text-blue-400 animate-pulse">Nos Partenaires</h1>
-        <div className="flex justify-center items-center gap-4">
+        <div className="block lg:hidden">
+          <Swiper
+            modules={[Navigation]}
+            navigation
+            spaceBetween={20}
+            slidesPerView={1}
+            loop={true}
+            className="max-w-xs mx-auto"
+          >
+            <SwiperSlide>
+              <img
+                src="/Partenaires/Millénium2.png"
+                alt="millénium"
+                className='w-full h-auto filter grayscale hover:filter-none transition duration-500'
+                loading="lazy"
+              />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img
+                src="/Partenaires/logo-edc.svg"
+                alt="edc"
+                className='w-full h-auto filter grayscale hover:grayscale-0 hover:invert transition duration-500'
+                loading="lazy"
+              />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img
+                src="/Partenaires/RBC.svg"
+                alt="RBC"
+                className='w-full h-auto filter grayscale hover:filter-none transition duration-500'
+                loading="lazy"
+              />
+            </SwiperSlide>
+          </Swiper>
+          <style>{`
+        .swiper-button-next,
+        .swiper-button-prev {
+          color: #3B82F6;
+          bottom: 10px;
+          top: auto;
+        }
+        .swiper-button-next {
+          right: 30px;
+        }
+        .swiper-button-prev {
+          left: 20px;
+        }
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+          font-size: 24px;
+        }
+      `}</style>
+        </div>
+        <div className="hidden lg:flex justify-center items-center gap-4">
           <img src="/Partenaires/Millénium2.png" alt="millénium" className='m-4 filter grayscale hover:filter-none transition duration-500' loading="lazy"/>
           <img src="/Partenaires/logo-edc.svg" alt="edc" className='w-60 h-60 m-4 filter grayscale hover:grayscale-0 hover:invert transition duration-500 ' loading="lazy"/>
           <img src="/Partenaires/RBC.svg" alt="RBC" className='w-60 h-60 filter grayscale hover:filter-none transition duration-500' loading="lazy"/>
         </div>
       </div>
-      <footer  id='contact' className="bg-[#0c0c1e] text-white px-6 pt-10">
+      <div>
+        <h1 className="text-3xl md:text-4xl font-bold text-center mt-10 tracking-wide text-blue-400 animate-pulse">Bénévole</h1>
+        <div className="grid lg:grid-cols-2 items-center p-9 shadow-lg relative z-10">
+          <div className="p-4 items-center text-center justify-center relative overflow-hidden w-[400px] mx-auto">
+                <Swiper
+                  modules={[Autoplay]}
+                  spaceBetween={30}
+                  slidesPerView={1}
+                  loop={true}
+                  autoplay={{ delay: 3000, disableOnInteraction: false }}>
+                    {benveloleImages.map((image, index) => (
+                      <SwiperSlide key={index}>
+                        <img src={image} alt={`Bénévole ${index + 1}`} className="w-auto h-[500px] rounded-xl object-cover" loading="lazy"/>
+                      </SwiperSlide>
+                    ))}
+                </Swiper>
+          </div>
+          <div id='benevole' className="md:text-left md:ml-20 text-center">
+            <h1 className='text-3xl font-bold text-blue-300 mb-6 max-w-xl'>Envie de rejoindre l'équipe de UdeM Entreprend comme bénévole ?
+            <span className='block font-semibold text-white text-2xl'>  Cliquez sur le bouton ci-dessous pour accéder au formulaire.</span></h1>
+            <Link to='/benevole'className="relative inline-block px-6 py-2 rounded-full text-white font-medium
+              border border-white/30 bg-white/10 backdrop-blur-md
+              hover:bg-gradient-to-r hover:from-blue-400 hover:to-violet-500
+            hover:text-white transition-all duration-300
+              hover:shadow-[0_0_25px_rgba(59,130,246,0.5)] hover:scale-105">
+          Devenir Bénévole
+        </Link>
+          </div>
+        </div>
+      </div>
+      <footer  id='contact' className="bg-[#0c0c1e] text-white px-6 pt-10 relative">
         <div className="flex flex-col md:flex-row justify-center items-start gap-16 text-center md:text-left">
           <div>
             <h1 className="mb-2 text-lg font-semibold">Contact</h1>
